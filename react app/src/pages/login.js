@@ -44,8 +44,10 @@ export default function SignInSide() {
   let dispatch = useDispatch();
   let history = useHistory();
   let user = useSelector(function (store) {
-    return store.user.name;
+    return store.user;
   });
+  let name = user.name;
+  let id = user.id;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -57,24 +59,24 @@ export default function SignInSide() {
     }
 
     if (userName) {
-      dispatch(userAction.loaduser(userName));
-      const socket = io("http://localhost:4000/provider");
-      console.log("TC-212", socket);
+      const socket = io("http://localhost:4000/provider", {
+        auth: { userName },
+      });
 
       socket.on("USER_ID", (data) => {
-        console.log("Server Client ID", data);
+        dispatch(userAction.loaduser({ name: userName, id: data }));
       });
-      if (socket.connected) {
-        alert("connected");
-      }
-      // history.push("/home");
+      socket.on("public_user", (data) => {
+        setTimeout(() => {
+          history.push("/home");
+        }, 500);
+      });
     }
   };
 
   function keyEvent(event) {
     let value = event.target.value;
-
-    dispatch(userAction.loaduser(value));
+    dispatch(userAction.loaduser({ name: value }));
   }
   return (
     <ThemeProvider theme={theme}>
@@ -116,7 +118,7 @@ export default function SignInSide() {
               You will be identified using your username
             </Typography>
             <Typography sx={{ mt: 2 }} component="p" variant="p">
-              {user}
+              {name}
             </Typography>
             <Box
               component="form"
@@ -147,6 +149,14 @@ export default function SignInSide() {
                 Join Chat <KeyboardTabIcon />
               </Button>
               <InfoModal />
+              <Typography
+                style={{ opacity: 0.5 }}
+                sx={{ mt: 2 }}
+                component="p"
+                variant="p"
+              >
+                App id : {id}
+              </Typography>
 
               <Copyright sx={{ mt: 5 }} />
             </Box>

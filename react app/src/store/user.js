@@ -2,16 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let initialState = {
   name: "@",
-  id: "",
+  id: "xxxxxxxxxxxx",
 };
 let userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
     loaduser(state, action) {
-      state.name = `@${action.payload}`;
+      for (const key in action.payload) {
+        state[key] = action.payload[key];
+      }
     },
-    empty(state, payload) {},
+    empty(state, action) {
+      state.name = "";
+      state.id = "";
+    },
   },
 });
 
