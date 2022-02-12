@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 let initialState = {
-  name: "",
+  name: "@",
   id: "",
 };
 let userSlice = createSlice({
@@ -9,9 +9,7 @@ let userSlice = createSlice({
   initialState,
   reducers: {
     loaduser(state, action) {
-      if (action.payload) {
-        state.name = `@${action.payload}`;
-      }
+      state.name = `@${action.payload}`;
     },
     empty(state, payload) {},
   },

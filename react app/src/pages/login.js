@@ -26,7 +26,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://alex.techkey.co.ke/">
+      <Link color="inherit" target="_blank" href="https://alex.techkey.co.ke/">
         akNjoroge
       </Link>{" "}
       {new Date().getFullYear()}
@@ -52,6 +52,11 @@ export default function SignInSide() {
     dispatch(userAction.loaduser(userName));
   };
 
+  function keyEvent(event) {
+    let value = event.target.value;
+
+    dispatch(userAction.loaduser(value));
+  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
@@ -91,17 +96,22 @@ export default function SignInSide() {
             <Typography sx={{ mt: 2 }} component="p" variant="p">
               You will be identified using your username
             </Typography>
+            <Typography sx={{ mt: 2 }} component="p" variant="p">
+              {user}
+            </Typography>
             <Box
               component="form"
               noValidate
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
-              {user}
               <TextField
                 margin="normal"
                 required
                 fullWidth
+                onKeyPress={keyEvent}
+                onChange={keyEvent}
+                onKeyUp={keyEvent}
                 id="userName"
                 label="User Name"
                 name="userName"
