@@ -68,7 +68,7 @@ export default function SignInSide() {
       });
       socket.on("public_user", (data) => {
         setTimeout(() => {
-          history.push("/home");
+          history.push("/online");
         }, 500);
       });
     }
