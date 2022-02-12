@@ -15,6 +15,8 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import background from "./../assets/bg.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { userAction } from "../store/user";
 function Copyright(props) {
   return (
     <Typography
@@ -36,13 +38,18 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+  let dispatch = useDispatch();
+  let user = useSelector(function (store) {
+    return store.user.name;
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      userName: data.get("userName"),
-    });
+    let userName = data.get("userName");
+
+    dispatch(userAction.loaduser(userName));
   };
 
   return (
@@ -90,6 +97,7 @@ export default function SignInSide() {
               onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
+              {user}
               <TextField
                 margin="normal"
                 required
