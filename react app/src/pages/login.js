@@ -17,6 +17,9 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import background from "./../assets/bg.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../store/user";
+import { useHistory } from "react-router-dom";
+import InfoModal from "../components/modal";
+import { io } from "socket.io-client";
 function Copyright(props) {
   return (
     <Typography
@@ -39,6 +42,7 @@ const theme = createTheme();
 
 export default function SignInSide() {
   let dispatch = useDispatch();
+  let history = useHistory();
   let user = useSelector(function (store) {
     return store.user.name;
   });
@@ -48,8 +52,23 @@ export default function SignInSide() {
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
     let userName = data.get("userName");
+    if (!userName) {
+      return;
+    }
 
-    dispatch(userAction.loaduser(userName));
+    if (userName) {
+      dispatch(userAction.loaduser(userName));
+      const socket = io("http://localhost:4000/provider");
+      console.log("TC-212", socket);
+
+      socket.on("USER_ID", (data) => {
+        console.log("Server Client ID", data);
+      });
+      if (socket.connected) {
+        alert("connected");
+      }
+      // history.push("/home");
+    }
   };
 
   function keyEvent(event) {
@@ -127,6 +146,7 @@ export default function SignInSide() {
               >
                 Join Chat <KeyboardTabIcon />
               </Button>
+              <InfoModal />
 
               <Copyright sx={{ mt: 5 }} />
             </Box>
