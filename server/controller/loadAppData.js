@@ -1,17 +1,12 @@
 let appio = require("./../app");
+let authMiddleware = require("./../middleware/authMiddleware");
 exports.loadApp = function name(socket) {
+  socket.on("disconnect", authMiddleware.disconnected);
+  //start
   const count = socket.server.engine.clientsCount;
+
   let io = appio.appio;
+  let appPublicData = appio.appPublicData;
 
-  console.log("TC-656", io.USER);
-  console.log("TC-656", io.USER.length);
-  // console.log("TC-66", socket.id);
-  // console.log("TC-66", "Total", count);
-  console.log("TC-66", socket.adapter.sockets(1));
-  // console.log("TC-66", socket.adapter);
-  // console.log("TC-66", "Users", socket.users);
-
-  socket.on("event", function (args) {
-    //
-  });
+  appPublicData.emit("active_clients", io.USER);
 };

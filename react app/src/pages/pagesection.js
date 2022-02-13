@@ -19,6 +19,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Logout from "../components/logoutHandler";
+import { NavLink, useHistory } from "react-router-dom";
 function Copyright(props) {
   return (
     <Typography
@@ -43,8 +44,12 @@ function PageSection(props) {
     return store.user;
   });
 
+  let history = useHistory();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  const clickHandler = (route) => {
+    history.push(route);
   };
   return (
     <Box
@@ -97,14 +102,40 @@ function PageSection(props) {
             onChange={handleChange}
             aria-label="nav tabs example"
           >
-            <LinkTab icon={<CloudIcon />} label="Online Users" to="/online" />
-            <LinkTab icon={<PublicIcon />} label="Public Chat" to="/online" />
             <LinkTab
-              icon={<PeopleAltIcon />}
-              label="Join a Groups"
-              to="/online"
+              onClick={function (event) {
+                event.preventDefault();
+                clickHandler("/online");
+              }}
+              icon={<CloudIcon />}
+              label=" Online Users"
             />
-            <LinkTab icon={<ChatIcon />} label="Private chat" to="/online" />
+            <LinkTab
+              onClick={function (event) {
+                event.preventDefault();
+                clickHandler("/public");
+              }}
+              icon={<PublicIcon />}
+              label="PUBLIC CHAT"
+            />
+
+            <LinkTab
+              onClick={function (event) {
+                event.preventDefault();
+                clickHandler("/onine/groups");
+              }}
+              icon={<PeopleAltIcon />}
+              label="Join Groups"
+            />
+
+            <LinkTab
+              onClick={function (event) {
+                event.preventDefault();
+                clickHandler("/online");
+              }}
+              icon={<ChatIcon />}
+              label="inbox"
+            />
           </Tabs>
         </Box>
       </Container>

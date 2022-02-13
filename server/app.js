@@ -41,7 +41,6 @@ appPublicData.use(authMiddleware.protected);
 
 //Read conencted socket stats
 appPublicData.on("connection", connection.loadApp);
-appPublicData.on("disconnect", authMiddleware.disconnected);
 
 //Public response
 function publicResponce(method, res) {
@@ -65,5 +64,6 @@ app.use("*", function (req, res, next) {
   });
 });
 
+exports.appPublicData = appPublicData;
 exports.appio = io;
 module.exports = server;

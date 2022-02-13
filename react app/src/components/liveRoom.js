@@ -18,7 +18,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ChatIcon from "@mui/icons-material/Chat";
+import { Link } from "react-router-dom";
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -92,21 +94,14 @@ function createData(name, userID, fat) {
   return { name, userID, fat };
 }
 
-const rows = [
-  createData("Cupcake", 304444444444444445, "2nd nov 2021"),
-  createData("Donut", 47312313152, "25th Jan 2022"),
-  createData("aqq", 454453232, "16th april 2022"),
-  createData("ghgh", 454453232, "16th april 2022"),
-  createData("names", 454453232, "16th april 2022"),
-  createData("Doe", 454453232, "16th april 2022"),
-];
-
 export default function LiveToom() {
   const [page, setPage] = React.useState(0);
+  const [rows, setrows] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   let user = useSelector(function (store) {
     return store.user;
   });
+  let userID = user.id;
   let socket;
   React.useEffect(
     function () {
@@ -117,7 +112,10 @@ export default function LiveToom() {
         });
 
         socket.on("connect_error", function (data) {
-          console.log("TC-qe", data);
+          console.log("TC-ERROR !!!!!!!", data);
+        });
+        socket.on("active_clients", function (data) {
+          setrows(data);
         });
       }
     },
@@ -141,32 +139,51 @@ export default function LiveToom() {
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
+            <th>#</th>
             <th>UserName</th>
-            <th align="right">UserID</th>
-            <th align="right">Date Reg</th>
+
+            <th align="right">Date Joined</th>
+            <th align="right">User ID</th>
+            <th align="right">Chat</th>
           </TableRow>
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
-          ).map((row) => (
-            <TableRow key={row.name}>
+          ).map((row, index) => (
+            <TableRow data-user={row.authSocketid} key={row.id}>
+              <TableCell component="th" scope="row">
+                {index + 1}
+              </TableCell>
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
+
               <TableCell style={{ width: 160 }} align="right">
-                {row.userID}
+                {row.date}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
-                {row.fat}
+                {row.id}
+              </TableCell>
+              <TableCell style={{ width: 160 }} align="right">
+                {userID == row.id && (
+                  <div title="This is You">
+                    <AccountCircleIcon title="This is You" />
+                  </div>
+                )}
+                {userID != row.id && (
+                  <Link to={`/private/${row.id}`}>
+                    <ChatIcon />
+                  </Link>
+                )}
               </TableCell>
             </TableRow>
           ))}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={6}>No data</TableCell>
             </TableRow>
           )}
         </TableBody>
