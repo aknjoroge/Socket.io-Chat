@@ -18,7 +18,7 @@ function App() {
         <Online />
       </Route>
       <Route path={"/public"} exact>
-        <PublicChat />
+        <PublicChat fullscreen={true} />
       </Route>
     </Fragment>
   );

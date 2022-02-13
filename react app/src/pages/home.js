@@ -16,7 +16,7 @@ export default function Home() {
   let history = useHistory();
   let socket;
   const [activeUserrows, setrows] = React.useState([]);
- 
+
   useEffect(
     function () {
       if (user.id == "xxxxxxxxxxxx") {
@@ -36,7 +36,7 @@ export default function Home() {
       });
 
       socket.on("connect_error", function (data) {
-        console.log("TC-ERROR !!!!!!!", data);
+        console.log("TC-ERROR 2 !!!!!!!", data);
       });
       socket.on("active_clients", function (data) {
         setrows(data);

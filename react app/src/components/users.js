@@ -10,7 +10,10 @@ function Users(props) {
     <div class="row mt-5">
       <div className="col-md-1"></div>
       <div className="col-md-10">
-        <div class="table-responsive">
+        <h3 style={{ fontWeight: 300 }} className="mb-2 baseFont">
+          Currently connected users.
+        </h3>
+        <div class="mt-2 table-responsive">
           <table class="table table-bordered mb-0">
             <thead>
               <tr>
@@ -24,7 +27,7 @@ function Users(props) {
             <tbody>
               {users.map(function (item, index) {
                 return (
-                  <tr>
+                  <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>{item.name}</td>
                     <td>{item.id}</td>

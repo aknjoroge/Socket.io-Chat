@@ -15,6 +15,7 @@ body {
 .bg-img {
   background: url("./assets/bg.jpg");
   background-size: cover;
+  min-height: 300px;
 }
 .baseFont {
   font-family: "Roboto";
@@ -25,11 +26,16 @@ body {
   border-color: blue !important;
 }
 .sidebar-main {
-  height: 100vh !important;
+  /* height: 100vh !important; */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .user-list {
   cursor: pointer;
+}
+.slimscroll-chat {
+  max-height: 370px;
+  min-height: 370px;
+  overflow-y: scroll;
 }

@@ -12,6 +12,10 @@ function Logout() {
     window.location.reload(true);
   }
 
-  return <button className="btn btn-dark">Logout</button>;
+  return (
+    <button onClick={logoutHadler} className="btn btn-dark">
+      Logout
+    </button>
+  );
 }
 export default Logout;

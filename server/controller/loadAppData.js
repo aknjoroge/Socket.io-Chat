@@ -10,3 +10,7 @@ exports.loadApp = function name(socket) {
 
   appPublicData.emit("active_clients", io.USER);
 };
+exports.publicChat = function name(socket) {
+  socket.on("disconnect", authMiddleware.disconnected);
+  //start
+};

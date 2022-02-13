@@ -38,6 +38,10 @@ export default function Login() {
       return;
     }
 
+    if (userName.length < 5) {
+      alert("user name short");
+      return;
+    }
     if (userName) {
       const socket = io("http://localhost:4000/provider", {
         auth: { userName },
@@ -92,7 +96,7 @@ export default function Login() {
                   className="baseFont"
                   for="emailaddress"
                 >
-                  UserName
+                  UserName (atleast 5 characters)
                 </label>
                 <input
                   style={{ fontWeight: 200 }}

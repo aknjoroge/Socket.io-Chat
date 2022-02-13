@@ -35,12 +35,16 @@ io.of("/provider").on("connection", (socket) => {
 
 //Define socket NameSpace
 const appPublicData = io.of("/publicData");
+const publicChat = io.of("/chat");
+const subscribeToChat = io.of("/chat/subscribe");
 
 //Example of a middleware
 appPublicData.use(authMiddleware.protected);
 
 //Read conencted socket stats
 appPublicData.on("connection", connection.loadApp);
+publicChat.on("connection", authMiddleware.publicProtected);
+subscribeToChat.on("connection", authMiddleware.subscribe);
 
 //Public response
 function publicResponce(method, res) {
