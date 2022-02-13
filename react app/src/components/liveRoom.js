@@ -111,6 +111,7 @@ export default function LiveToom() {
   React.useEffect(
     function () {
       if (user.id != "xxxxxxxxxxxx") {
+        //authenticate user
         socket = io("http://localhost:4000/publicData", {
           auth: { name: user.name, id: user.id },
         });
