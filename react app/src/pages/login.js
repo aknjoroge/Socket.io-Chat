@@ -64,6 +64,10 @@ export default function SignInSide() {
       });
 
       socket.on("USER_ID", (data) => {
+        localStorage.setItem(
+          "publicUserID",
+          JSON.stringify({ name: userName, id: data })
+        );
         dispatch(userAction.loaduser({ name: userName, id: data }));
       });
       socket.on("public_user", (data) => {

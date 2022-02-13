@@ -12,87 +12,37 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ChatIcon from "@mui/icons-material/Chat";
 import { Route } from "react-router-dom";
 import LiveRoom from "./../components/liveRoom";
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" target="_blank" href="https://alex.techkey.co.ke/">
-        akNjoroge
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+import PageSection from "./pagesection";
+import { useDispatch, useSelector } from "react-redux";
+import { userAction } from "../store/user";
+export default function Home() {
+  let dispatch = useDispatch();
+  let user = useSelector(function (store) {
+    return store.user;
+  });
+
+  React.useEffect(
+    function () {
+      if (user.id == "xxxxxxxxxxxx") {
+        let localUSer = localStorage.getItem("publicUserID");
+
+        if (typeof localUSer == "string") {
+          let userObject = JSON.parse(localUSer);
+          if (userObject.name != "") {
+            dispatch(userAction.loaduser(userObject));
+          }
+        }
+      }
+    },
+    [user]
   );
-}
-
-export default function StickyFooter() {
-  const [value, setValue] = React.useState("one");
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <CssBaseline />
-      <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
-        <Typography variant="h2" component="h1" gutterBottom>
-          Public Chat System
-        </Typography>
-        <Typography variant="p" component="p" gutterBottom>
-          select a channel below
-        </Typography>
-        <Box sx={{ mt: 4, width: "100%" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="nav tabs example"
-          >
-            <LinkTab icon={<CloudIcon />} label="Online Users" to="/online" />
-            <LinkTab icon={<PublicIcon />} label="Public Chat" to="/online" />
-            <LinkTab
-              icon={<PeopleAltIcon />}
-              label="Join a Groups"
-              to="/online"
-            />
-            <LinkTab icon={<ChatIcon />} label="Private chat" to="/online" />
-          </Tabs>
-        </Box>
-      </Container>
+    <PageSection>
       <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
         <Route path="/online" exact>
           <LiveRoom />
         </Route>
       </Container>
-      <Box
-        component="footer"
-        sx={{
-          py: 3,
-          px: 2,
-          mt: "auto",
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[200]
-              : theme.palette.grey[800],
-        }}
-      >
-        <Container maxWidth="sm">
-          <Typography variant="body1">
-            Managed by Techkey Cybernetics
-          </Typography>
-          <Copyright />
-        </Container>
-      </Box>
-    </Box>
+    </PageSection>
   );
 }
