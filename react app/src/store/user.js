@@ -9,8 +9,13 @@ let userSlice = createSlice({
   initialState,
   reducers: {
     loaduser(state, action) {
-      state.name = `@${action.payload.name}`;
-      state.id = action.payload.id;
+      let name = action.payload.name;
+      let id = action.payload.id;
+
+      state.name = `@${name}`;
+      if (id) {
+        state.id = action.payload.id;
+      }
       // for (const key in action.payload) {
       //   if (String(state[key]) == "name") {
       //     state[key] = `@${action.payload[key]}`;

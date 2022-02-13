@@ -1,48 +1,29 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import background from "./../assets/bg.jpg";
+import React, { useRef } from "react";
+
+import {
+  Container,
+  Input,
+  FormGroup,
+  Form,
+  Row,
+  Col,
+  FormFeedback,
+  Button,
+  FormText,
+  Label,
+} from "reactstrap";
+
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../store/user";
 import { useHistory } from "react-router-dom";
-import InfoModal from "../components/modal";
+
 import { io } from "socket.io-client";
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" target="_blank" href="https://alex.techkey.co.ke/">
-        akNjoroge
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Modal from "../components/common/modal";
 
-const theme = createTheme();
-
-export default function SignInSide() {
+export default function Login() {
   let dispatch = useDispatch();
   let history = useHistory();
+  let inputRef = useRef();
   let user = useSelector(function (store) {
     return store.user;
   });
@@ -51,9 +32,8 @@ export default function SignInSide() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    let userName = data.get("userName");
+
+    let userName = inputRef.current.value;
     if (!userName) {
       return;
     }
@@ -80,93 +60,84 @@ export default function SignInSide() {
 
   function keyEvent(event) {
     let value = event.target.value;
+
     dispatch(userAction.loaduser({ name: value }));
   }
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
-        <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-          sx={{
-            backgroundImage: `url(${background})`,
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <InfoOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Enter a user name to continue
-            </Typography>
-            <Typography sx={{ mt: 2 }} component="p" variant="p">
-              You will be identified using your username
-            </Typography>
-            <Typography sx={{ mt: 2 }} component="p" variant="p">
+    <div class="account-pages ">
+      <div class="row  justify-content-center">
+        <div class="col-md-6 bg-img"></div>
+        <div class="col-md-6 sidebar-main">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <h4 class="text-uppercase mt-0">
+                <i className="mdi mdi-account-cog mdi-48px"></i>
+              </h4>
+            </div>
+
+            <h2 style={{ fontWeight: 300 }} className="text-center baseFont">
+              Socket.io Public Chat App
+            </h2>
+            <h5 style={{ fontWeight: 300 }} className="text-center baseFont">
+              Please Provide A UserName
+            </h5>
+            <p style={{ fontWeight: 300 }} className="text-center baseFont">
               {name}
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
-            >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                onKeyPress={keyEvent}
-                onChange={keyEvent}
-                onKeyUp={keyEvent}
-                id="userName"
-                label="User Name"
-                name="userName"
-                autoComplete="text"
-                autoFocus
-              />
+            </p>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Join Chat <KeyboardTabIcon />
-              </Button>
-              <InfoModal />
-              <Typography
-                style={{ opacity: 0.5 }}
-                sx={{ mt: 2 }}
-                component="p"
-                variant="p"
-              >
-                App id : {id}
-              </Typography>
+            <form onSubmit={handleSubmit} action="#">
+              <div class="form-group mb-3">
+                <label
+                  style={{ fontWeight: 200 }}
+                  className="baseFont"
+                  for="emailaddress"
+                >
+                  UserName
+                </label>
+                <input
+                  style={{ fontWeight: 200 }}
+                  class="form-control app-input baseFont"
+                  type="text"
+                  onChange={keyEvent}
+                  ref={inputRef}
+                  required=""
+                  placeholder="Enter a username"
+                />
+              </div>
 
-              <Copyright sx={{ mt: 5 }} />
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+              <div class="form-group mb-0 text-center">
+                <button
+                  class="btn  app-input baseFont btn-primary btn-block"
+                  type="submit"
+                >
+                  Join Chat <i className="mdi md-18px mdi-door-open"></i>
+                </button>
+              </div>
+            </form>
+            <hr />
+            <div class="row mt-3">
+              <div class="col-12 text-center">
+                <p
+                  style={{ fontWeight: 300 }}
+                  className="text-center text-muted baseFont"
+                >
+                  App id : {id}
+                </p>
+                <p>
+                  <button
+                    class="btn btn-primary waves-effect waves-light"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                  >
+                    <i class="mdi mdi-information-variant mr-1 mdi-18px baseFont"></i>
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Modal />
+    </div>
   );
 }

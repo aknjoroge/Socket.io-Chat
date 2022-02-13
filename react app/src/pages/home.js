@@ -1,20 +1,12 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
-import CloudIcon from "@mui/icons-material/Cloud";
-import PublicIcon from "@mui/icons-material/Public";
-import Tabs from "@mui/material/Tabs";
-import LinkTab from "@mui/material/Tab";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import ChatIcon from "@mui/icons-material/Chat";
-import { Route, useHistory } from "react-router-dom";
-import LiveRoom from "./../components/liveRoom";
-import PageSection from "./pagesection";
+import React, { Fragment, useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+
+import TopBar from "../components/common/topbar";
+import SideBar from "../components/common/sideBar";
 import { userAction } from "../store/user";
+import Users from "../components/users";
 export default function Home() {
   let dispatch = useDispatch();
   let user = useSelector(function (store) {
@@ -22,10 +14,10 @@ export default function Home() {
   });
   let history = useHistory();
 
-  React.useEffect(
+  useEffect(
     function () {
       if (user.id == "xxxxxxxxxxxx") {
-        return history.push("/");
+        // return history.push("/");
         let localUSer = localStorage.getItem("publicUserID");
         if (typeof localUSer == "string") {
           let userObject = JSON.parse(localUSer);
@@ -38,12 +30,18 @@ export default function Home() {
     [user]
   );
   return (
-    <PageSection>
-      <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
-        <Route path="/online" exact>
-          <LiveRoom />
-        </Route>
-      </Container>
-    </PageSection>
+    <Fragment>
+      <div id="wrapper"></div>
+      <TopBar />
+      <SideBar />
+      <div class="content-page">
+        <div class="content">
+          <div class="container-fluid">
+              <Users/>
+            
+          </div>
+        </div>
+      </div>
+    </Fragment>
   );
 }

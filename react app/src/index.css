@@ -12,3 +12,21 @@ body {
   text-align: center;
   color: black;
 }
+.bg-img {
+  background: url("./assets/bg.jpg");
+  background-size: cover;
+}
+.baseFont {
+  font-family: "Roboto";
+}
+.app-input {
+  height: 50px !important;
+
+  border-color: blue !important;
+}
+.sidebar-main {
+  height: 100vh !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
