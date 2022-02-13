@@ -107,7 +107,8 @@ export default function Login() {
 
               <div class="form-group mb-0 text-center">
                 <button
-                  class="btn  app-input baseFont btn-primary btn-block"
+                  style={{ height: "50px" }}
+                  class="btn    baseFont btn-primary btn-block"
                   type="submit"
                 >
                   Join Chat <i className="mdi md-18px mdi-door-open"></i>
