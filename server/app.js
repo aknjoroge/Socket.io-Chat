@@ -56,6 +56,7 @@ function publicResponce(method, res) {
     application: "Socket.io Base Server",
     apiUrl: "/api/v1/",
     url: "https://public-socket.web.app/",
+    github: "https://github.com/aknjoroge/Socket.io-Chat",
   });
 }
 app.get("/", function (req, res) {
