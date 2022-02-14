@@ -18,8 +18,10 @@ export default function Groups(props) {
   let user = useSelector(function (store) {
     return store.user;
   });
+  let [joinState, setjoinState] = useState();
   let [inChat, setInChat] = useState(false);
   let [groupID, setGroupID] = useState("");
+  let [socket, setsocket] = useState("");
   let [hideView, sethideView] = useState(false);
   let history = useHistory();
 
@@ -30,13 +32,7 @@ export default function Groups(props) {
     { name: "CSS", id: "4" },
   ]);
 
-  let [messages, setMessages] = useState([
-    {
-      date: "adadad",
-      userName: "dasda",
-      userID: "dsada",
-    },
-  ]);
+  let [messages, setMessages] = useState([]);
   useEffect(
     function () {
       if (user.id == "xxxxxxxxxxxx") {
@@ -44,19 +40,25 @@ export default function Groups(props) {
       }
 
       if (inChat && groupID != "") {
-        let socket = io("http://localhost:4000/groups", {
-          auth: { name: user.name, id: user.id },
-        });
-        socket.on("fromServer", function (data) {
-          console.log("TC-GROUP", data);
-        });
-        socket.on("connect_error", function (data) {
-          console.log("TC-22222", data);
-        });
-
-        setTimeout(() => {
-          socket.emit("eventAQ", "data eventAQ data");
-        }, 2000);
+        if (!socket.connected) {
+          let conn = io("http://localhost:4000/groups", {
+            auth: { name: user.name, id: user.id, groupID },
+          });
+          conn.on("connect_error", function (data) {
+            console.log("TC-22222", data);
+          });
+          setsocket(conn);
+          conn.on("joined_private_group", function (data) {
+            setMessages(function name(prevData) {
+              return [...prevData, data];
+            });
+          });
+          conn.on("new_group_message", function (data) {
+            setMessages(function name(prevData) {
+              return [...prevData, data];
+            });
+          });
+        }
       }
     },
     [inChat, groupID]
@@ -84,9 +86,15 @@ export default function Groups(props) {
 
   let classses = { marginTop: fullscreen && inChat ? "0px" : "70px" };
 
+  function messageReceived(response) {
+    if (response.status == "success") {
+      setMessages(function name(prevData) {
+        return [...prevData, response.data];
+      });
+    }
+  }
   function addMessageHandler(data) {
-    console.log("TC-88", data);
-    // socket.volatile.emit("join_group_message", { data, groupID });
+    socket.emit("new_private_group_message", data, groupID, messageReceived);
   }
   return (
     <Fragment>
@@ -102,6 +110,7 @@ export default function Groups(props) {
               <ChatBox
                 type="group"
                 fag={groupID}
+                joinState={joinState}
                 addMessageHandler={addMessageHandler}
                 messages={messages}
                 hideView={hideView}

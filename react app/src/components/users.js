@@ -39,7 +39,7 @@ function Users(props) {
                         </div>
                       )}
                       {item.id != user.id && (
-                        <Link to={`/private/${item.authSocketid}`}>
+                        <Link to={`/inbox/${item.authSocketid}`}>
                           <i className="mdi mdi-24px mdi-chat"></i>
                         </Link>
                       )}

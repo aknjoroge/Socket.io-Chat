@@ -25,11 +25,24 @@ exports.publicChat = function name(socket) {
 };
 
 exports.loadGroups = function name(socket) {
-  console.log("TC-655", "groupConnection");
-  socket.join("one");
+   
+  console.log(socket.handshake.auth);
+  let groupID = socket.handshake.auth.groupID;
+  socket.join(`${groupID}`);
+  socket.emit("joined_private_group", {
+    event: "you joined",
+    name: socket.handshake.auth.name,
+  });
+  socket.to(`${groupID}`).emit("joined_private_group", {
+    event: `${socket.handshake.auth.name} Joined this private group`,
+    name: socket.handshake.auth.name,
+  });
 
-  socket.on("eventAQ", function (data) {
-    console.log("REQuestt", data);
-    socket.to("one").emit("fromServer", "welcome to gorup");
+  socket.on("new_private_group_message", function (data, groupID, callback) {
+    socket.to(`${groupID}`).emit("new_group_message", data);
+    callback({
+      status: "success",
+      data,
+    });
   });
 };

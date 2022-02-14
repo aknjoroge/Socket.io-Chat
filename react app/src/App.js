@@ -24,6 +24,9 @@ function App() {
       <Route path={"/groups"} exact>
         <Groups fullscreen={true} />
       </Route>
+      <Route path={"/inbox/:id"} exact>
+        <Groups fullscreen={true} />
+      </Route>
     </Fragment>
   );
 }

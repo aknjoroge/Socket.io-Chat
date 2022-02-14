@@ -60,7 +60,7 @@ export default function PublicChat(props) {
 
   function joinCallback(data) {
     setjoinState(data);
-    //Object { event: "you joined", name: "@dadsad" }
+    
   }
   let classses = { marginTop: fullscreen && inChat ? "0px" : "70px" };
 
