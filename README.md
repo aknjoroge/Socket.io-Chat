@@ -124,3 +124,5 @@ let port = 4000;
 ### The front End client uses `socket.io-client` through NPM
 
 ### For more docs view the individual documentations
+
+### During setup install both the server folder node modules and the react app as well
