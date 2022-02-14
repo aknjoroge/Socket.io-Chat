@@ -1,5 +1,11 @@
 let fs = require("fs");
 
+/*
+=================================================================
+NOT IN USE WITH THE SOCKET SERVER. THIS IS JUST A NODE REST EXAMPLE
+=================================================================
+ */
+
 let users = fs.readFileSync(
   `${__dirname}/../dev-data/data/users.json`,
   "utf-8"
