@@ -2,6 +2,10 @@
 let express = require("express");
 //initialize express
 let app = express();
+let cors = require("cors");
+app.use(cors());
+app.options("*", cors());
+app.enable("trust proxy");
 //require https module
 const http = require("http");
 //initialize a server
@@ -10,7 +14,13 @@ const server = http.createServer(app);
 let { Server } = require("socket.io");
 //initialize socket io
 let io = new Server(server, {
-  cors: { origin: ["http://localhost:3000", "http://localhost"] },
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "https://a-socket-server.web.app/",
+      "http://localhost",
+    ],
+  },
 });
 
 //require the middlware
