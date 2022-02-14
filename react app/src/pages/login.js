@@ -66,7 +66,7 @@ export default function Login() {
   }
   return (
     <div class="account-pages ">
-      <div class="row  justify-content-center">
+      <div style={{ height: "100vh" }} class="row  justify-content-center">
         <div class="col-md-6 bg-img"></div>
         <div class="col-md-6 sidebar-main">
           <div class="card-body p-4">
@@ -98,7 +98,7 @@ export default function Login() {
                 <input
                   style={{ fontWeight: 200 }}
                   className={`form-control app-input baseFont ${
-                    isValid ? "inputValid" : "inputValid"
+                    isValid ? "inputInValid" : "inputValid"
                   }`}
                   type="text"
                   onChange={keyEvent}

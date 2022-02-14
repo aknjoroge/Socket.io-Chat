@@ -25,10 +25,12 @@ body {
 }
 
 .inputValid {
-  border-color: green !important;
+  border-color: blue !important;
+  border-width: 2px !important;
 }
 .inputInValid {
   border-color: red !important;
+  border-width: 2px !important;
 }
 .sidebar-main {
   /* height: 100vh !important; */

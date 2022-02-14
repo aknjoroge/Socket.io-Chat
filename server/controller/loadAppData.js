@@ -25,7 +25,6 @@ exports.publicChat = function name(socket) {
 };
 
 exports.loadGroups = function name(socket) {
-   
   console.log(socket.handshake.auth);
   let groupID = socket.handshake.auth.groupID;
   socket.join(`${groupID}`);
@@ -40,6 +39,19 @@ exports.loadGroups = function name(socket) {
 
   socket.on("new_private_group_message", function (data, groupID, callback) {
     socket.to(`${groupID}`).emit("new_group_message", data);
+    callback({
+      status: "success",
+      data,
+    });
+  });
+};
+exports.inboxChat = function name(socket) {
+  // let data = socket.handshake.auth;
+  let io = appio.appPublicData;
+  socket.on("private_message", function (data, userID, callback) {
+    // socket.to(userID).emit("new_private_message", data);
+    io.to(userID).emit("new_private_message", data);
+
     callback({
       status: "success",
       data,

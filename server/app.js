@@ -38,6 +38,7 @@ const appPublicData = io.of("/publicData");
 const publicChat = io.of("/chat");
 const subscribeToChat = io.of("/chat/subscribe");
 const groupChat = io.of("/groups");
+const inboxChat = io.of("/inbox");
 
 //Example of a middleware
 appPublicData.use(authMiddleware.protected);
@@ -47,6 +48,7 @@ appPublicData.on("connection", connection.loadApp);
 subscribeToChat.on("connection", authMiddleware.subscribe);
 publicChat.on("connection", authMiddleware.publicProtected);
 groupChat.on("connection", connection.loadGroups);
+inboxChat.on("connection", connection.inboxChat);
 
 //Public response
 function publicResponce(method, res) {

@@ -20,6 +20,7 @@ function Users(props) {
                 <th>#</th>
                 <th>User Name</th>
                 <th>User ID</th>
+                <th>Socket ID</th>
                 <th>Joining time</th>
                 <th>...</th>
               </tr>
@@ -31,6 +32,7 @@ function Users(props) {
                     <th scope="row">{index + 1}</th>
                     <td>{item.name}</td>
                     <td>{item.id}</td>
+                    <td>{item.authSocketid}</td>
                     <td>{item.date}</td>
                     <td className="text-center">
                       {item.id == user.id && (

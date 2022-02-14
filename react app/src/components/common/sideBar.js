@@ -4,15 +4,13 @@ import { Link } from "react-router-dom";
 
 function SideBar(props) {
   let { hideView = true } = props;
- 
+
   let user = useSelector(function (store) {
     return store.user;
   });
   let classses = {
     top: hideView ? "70px;" : "0px",
   };
-
-
 
   return (
     <div style={classses} class="left-side-menu">
@@ -24,8 +22,8 @@ function SideBar(props) {
 
           <ul class="list-inline">
             <li class="list-inline-item">
-              <a  href="#">
-                <i  class="mdi mdi-power"></i>
+              <a href="#">
+                <i class="mdi mdi-power"></i>
               </a>
             </li>
           </ul>

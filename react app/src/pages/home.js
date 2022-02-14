@@ -7,8 +7,9 @@ import TopBar from "../components/common/topbar";
 import SideBar from "../components/common/sideBar";
 import Users from "../components/users";
 import { io } from "socket.io-client";
-export default function Home() {
+export default function Home(props) {
   let dispatch = useDispatch();
+  let { cb } = props;
   let [socket, setSocket] = useState({});
   let user = useSelector(function (store) {
     return store.user;
@@ -33,6 +34,7 @@ export default function Home() {
         });
         conn.on("connected_success", function (data) {
           setSocket(conn);
+          cb(conn);
         });
 
         conn.on("active_clients", function (data) {
