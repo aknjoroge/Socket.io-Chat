@@ -35,14 +35,6 @@
 
 ---
 
-## Preview
-
-# Hosting CURRENTLY not working due to CORS ISSUES
-
-### This project is Hosted [Here https://a-socket-server.web.app/](https://a-socket-server.web.app/)
-
----
-
 ### ETC
 
 #### Authentication - Implemented using socket Middlewares
