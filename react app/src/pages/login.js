@@ -38,6 +38,7 @@ export default function Login() {
     if (userName) {
       const socket = io(`${API_ULR}/provider`, {
         auth: { userName },
+        extraHeaders: { "socket-allow": "allow" },
       });
 
       socket.on("USER_ID", (data) => {
