@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 
 import { io } from "socket.io-client";
 import Modal from "../components/common/modal";
+import API_ULR from "../store/var";
 
 export default function Login() {
   let dispatch = useDispatch();
@@ -35,7 +36,7 @@ export default function Login() {
       return;
     }
     if (userName) {
-      const socket = io("http://localhost:4000/provider", {
+      const socket = io(`${API_ULR}/provider`, {
         auth: { userName },
       });
 

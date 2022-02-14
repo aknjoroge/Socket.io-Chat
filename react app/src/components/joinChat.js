@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import API_ULR from "../store/var";
 function JoinChat(props) {
   let { setState, cb } = props;
   let user = useSelector(function (store) {
@@ -10,7 +11,7 @@ function JoinChat(props) {
     if (user.id == "xxxxxxxxxxxx") {
       return;
     }
-    let socket = io("http://localhost:4000/chat/subscribe", {
+    let socket = io(`${API_ULR}/chat/subscribe`, {
       auth: { name: user.name, id: user.id },
     });
 

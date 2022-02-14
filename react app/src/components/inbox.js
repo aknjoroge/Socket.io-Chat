@@ -9,6 +9,7 @@ import SideBar from "./common/sideBar";
 import { io } from "socket.io-client";
 
 import ChatBox from "./common/chatBox";
+import API_ULR from "../store/var";
 export default function InboxApp(props) {
   let { fullscreen } = props;
 
@@ -33,7 +34,7 @@ export default function InboxApp(props) {
     function () {
       if (chatID) {
         if (!socket.connected) {
-          let conn = io("http://localhost:4000/inbox", {
+          let conn = io(`${API_ULR}/inbox`, {
             auth: { name: user.name, id: user.id, chatID },
           });
           conn.on("connect_error", function (data) {

@@ -37,7 +37,7 @@
 
 ## Preview
 
-### This project is Hosted [Here]()
+### This project is Hosted [Here https://a-socket-server.web.app/](https://a-socket-server.web.app/)
 
 ---
 
@@ -126,3 +126,12 @@ let port = 4000;
 ### For more docs view the individual documentations
 
 ### During setup install both the server folder node modules and the react app as well
+
+## API url
+
+#### The online API is hosted on : but for your local development, change the URL in `react app\src\store\var.js`
+
+```js
+let API_ULR = "http://localhost:4000/";
+export default API_ULR;
+```

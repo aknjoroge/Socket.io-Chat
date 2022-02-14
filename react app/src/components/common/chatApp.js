@@ -5,6 +5,7 @@ import TextInput from "./textInput";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import ChatBox from "./chatBox";
+import API_ULR from "../../store/var";
 function ChatApp(props) {
   let user = useSelector(function (store) {
     return store.user;
@@ -17,7 +18,7 @@ function ChatApp(props) {
   useEffect(function () {
     // Adding event listeners
     if (!socket.connected) {
-      let conn = io("http://localhost:4000/chat", {
+      let conn = io(`${API_ULR}/chat`, {
         auth: { name: user.name, id: user.id },
       });
       conn.on("connect_error", function (data) {

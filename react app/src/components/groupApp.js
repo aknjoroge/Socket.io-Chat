@@ -12,6 +12,7 @@ import JoinChat from "./joinChat";
 import ChatApp from "./common/chatApp";
 import AppGroups from "./groups";
 import ChatBox from "./common/chatBox";
+import API_ULR from "../store/var";
 export default function Groups(props) {
   let { fullscreen } = props;
   let dispatch = useDispatch();
@@ -41,7 +42,7 @@ export default function Groups(props) {
 
       if (inChat && groupID != "") {
         if (!socket.connected) {
-          let conn = io("http://localhost:4000/groups", {
+          let conn = io(`${API_ULR}/groups`, {
             auth: { name: user.name, id: user.id, groupID },
           });
           conn.on("connect_error", function (data) {

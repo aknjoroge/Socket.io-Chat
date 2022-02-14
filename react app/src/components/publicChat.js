@@ -10,6 +10,7 @@ import { userAction } from "../store/user";
 import { io } from "socket.io-client";
 import JoinChat from "./joinChat";
 import ChatApp from "./common/chatApp";
+import API_ULR from "../store/var";
 export default function PublicChat(props) {
   let { fullscreen } = props;
   let dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function PublicChat(props) {
     }
     //authenticate user
     if (!socket.connected) {
-      let conn = io("http://localhost:4000/chat", {
+      let conn = io(`${API_ULR}/chat`, {
         auth: { name: user.name, id: user.id },
       });
       conn.on("connect_error", function (data) {
@@ -60,7 +61,6 @@ export default function PublicChat(props) {
 
   function joinCallback(data) {
     setjoinState(data);
-    
   }
   let classses = { marginTop: fullscreen && inChat ? "0px" : "70px" };
 

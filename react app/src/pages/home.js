@@ -7,6 +7,7 @@ import TopBar from "../components/common/topbar";
 import SideBar from "../components/common/sideBar";
 import Users from "../components/users";
 import { io } from "socket.io-client";
+import API_ULR from "../store/var";
 export default function Home(props) {
   let dispatch = useDispatch();
   let { cb } = props;
@@ -25,7 +26,7 @@ export default function Home(props) {
       }
       if (!socket.connected) {
         //authenticate user
-        let conn = io("http://localhost:4000/publicData", {
+        let conn = io(`${API_ULR}/publicData`, {
           auth: { name: user.name, id: user.id },
         });
         conn.on("connect_error", function (data) {
