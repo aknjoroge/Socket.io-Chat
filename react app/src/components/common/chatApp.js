@@ -1,72 +1,74 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Messsage from "./message";
 import TextInput from "./textInput";
-
+import { io } from "socket.io-client";
+import { useSelector } from "react-redux";
+import ChatBox from "./chatBox";
 function ChatApp(props) {
-  let { hideView } = props;
+  let user = useSelector(function (store) {
+    return store.user;
+  });
+  let { hideView, joinState } = props;
   let [messages, setMessages] = useState([]);
-  let dummyMessages = [
-    {
-      userName: "Margaret Clayton",
-      message: "dasdasda lorem lroem",
-      date: "10:00",
-      userID: "",
-    },
-    {
-      userName: "dasdad doe",
-      message: "dadasdasdadam",
-      date: "10:00",
-      userID: "",
-    },
-  ];
+  let [socket, setsocket] = useState({});
+  //Creating Chat Socket connection
+
   useEffect(function () {
-    setMessages(dummyMessages);
+    // Adding event listeners
+    if (!socket.connected) {
+      let conn = io("http://localhost:4000/chat", {
+        auth: { name: user.name, id: user.id },
+      });
+      conn.on("connect_error", function (data) {
+        console.log("TC-ERROR 1 !!!!!!!", data);
+      });
+      setsocket(conn);
+      conn.on("add_pubic_message", function (response) {
+        setMessages(function name(prevData) {
+          return [...prevData, response];
+        });
+      });
+    }
   }, []);
 
+  useEffect(
+    function () {
+      if (joinState) {
+        if (joinState.event) {
+          setMessages(function name(prevData) {
+            return [...prevData, joinState];
+          });
+        }
+      }
+    },
+    [joinState]
+  );
+
+  function messageReceived(response) {
+    if (response.status == "success") {
+      setMessages(function name(prevData) {
+        return [...prevData, response.data];
+      });
+    }
+  }
 
   function addMessageHandler(data) {
-      
+    socket.emit("new_public_message", data, messageReceived);
+
+    let element = document.querySelector(".slimscroll-chat");
+
+    element.scrollTop = element.scrollHeight;
   }
 
   return (
-    <div className={`row ${hideView ? "mt-4" : "mt-0"} `}>
-      <div class="col-xl-12 col-lg-12">
-        <div className="p-2">
-          <div class="conversation-list-card card">
-            <div class="card-body">
-              <div class="media">
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1 text-truncate">Public Chat</h5>
-                  <p class="font-13 text-muted mb-0">
-                    <i class="mdi mdi-circle text-success mr-1 font-11"></i>{" "}
-                    Online
-                  </p>
-                </div>
-                <Link className="btn btn-warning" to="/online">
-                  Exit Chat
-                </Link>
-              </div>
-              <hr class="my-3" />
-
-              <div>
-                <ul class="conversation-list slimscroll slimscroll-chat">
-                  <li>
-                    <div class="chat-day-title">
-                      <span class="title">Messages</span>
-                    </div>
-                  </li>
-                  {messages.map(function (item, index) {
-                    return <Messsage key={index} item={item} />;
-                  })}
-                </ul>
-              </div>
-            </div>
-            <TextInput addMessage={addMessageHandler} />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Fragment>
+      <ChatBox
+        addMessageHandler={addMessageHandler}
+        messages={messages}
+        hideView={hideView}
+      />
+    </Fragment>
   );
 }
 

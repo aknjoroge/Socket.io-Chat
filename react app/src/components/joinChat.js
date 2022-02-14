@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 function JoinChat(props) {
-  let { setState } = props;
+  let { setState, cb } = props;
   let user = useSelector(function (store) {
     return store.user;
   });
@@ -18,6 +18,9 @@ function JoinChat(props) {
       if (data) {
         setState(true);
       }
+    });
+    socket.on("New_Group_Member", function (data) {
+      cb(data);
     });
   }
   return (

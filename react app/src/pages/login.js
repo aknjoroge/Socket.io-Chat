@@ -1,17 +1,4 @@
-import React, { useRef } from "react";
-
-import {
-  Container,
-  Input,
-  FormGroup,
-  Form,
-  Row,
-  Col,
-  FormFeedback,
-  Button,
-  FormText,
-  Label,
-} from "reactstrap";
+import React, { useRef, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../store/user";
@@ -24,6 +11,7 @@ export default function Login() {
   let dispatch = useDispatch();
   let history = useHistory();
   let inputRef = useRef();
+  let [isValid, setisInvalid] = useState(true);
   let user = useSelector(function (store) {
     return store.user;
   });
@@ -38,8 +26,12 @@ export default function Login() {
       return;
     }
 
-    if (userName.length < 5) {
-      alert("user name short");
+    if (userName.length > 8) {
+      alert("user name Too long");
+      return;
+    }
+    if (userName.length < 4) {
+      alert("user name too short");
       return;
     }
     if (userName) {
@@ -64,6 +56,11 @@ export default function Login() {
 
   function keyEvent(event) {
     let value = event.target.value;
+    if (value.length >= 4 && value.length <= 8) {
+      setisInvalid(false);
+    } else {
+      setisInvalid(true);
+    }
 
     dispatch(userAction.loaduser({ name: value }));
   }
@@ -96,15 +93,18 @@ export default function Login() {
                   className="baseFont"
                   for="emailaddress"
                 >
-                  UserName (atleast 5 characters)
+                  UserName ( 4 to 8 chacters long )
                 </label>
                 <input
                   style={{ fontWeight: 200 }}
-                  class="form-control app-input baseFont"
+                  className={`form-control app-input baseFont ${
+                    isValid ? "inputValid" : "inputValid"
+                  }`}
                   type="text"
                   onChange={keyEvent}
                   ref={inputRef}
                   required=""
+                  valid
                   placeholder="Enter a username"
                 />
               </div>
@@ -112,7 +112,10 @@ export default function Login() {
               <div class="form-group mb-0 text-center">
                 <button
                   style={{ height: "50px" }}
-                  class="btn    baseFont btn-primary btn-block"
+                  className={`btn  baseFont   btn-block ${
+                    isValid ? "btn-danger" : "btn-primary"
+                  }`}
+                  disabled={isValid}
                   type="submit"
                 >
                   Join Chat <i className="mdi md-18px mdi-door-open"></i>
@@ -130,7 +133,7 @@ export default function Login() {
                 </p>
                 <p>
                   <button
-                    class="btn btn-primary waves-effect waves-light"
+                    className={`btn btn-primary waves-effect waves-light`}
                     data-toggle="modal"
                     data-target="#exampleModal"
                   >

@@ -1,7 +1,5 @@
 let appio = require("./../app");
-
-let publicSpace = "PublicChat";
-
+let PUBLIC_CHAT = "public_chat";
 exports.protected = function name(socket, next) {
   let authData = socket.handshake.auth;
   if (!authData.id || authData.id === "" || authData.id == "xxxxxxxxxxxx") {
@@ -73,10 +71,17 @@ exports.publicProtected = function name(socket, next) {
 
   if (inPublicChat.length == 0) {
     socket.emit("Not_In_Chat", false);
-  } else {
-    socket.emit("Not_In_Chat", true);
-    socket.join(publicSpace);
+    return;
   }
+  socket.emit("Not_In_Chat", true);
+
+  socket.on("new_public_message", function (data, callback) {
+    socket.broadcast.emit("add_pubic_message", data);
+    callback({
+      status: "success",
+      data,
+    });
+  });
 };
 
 exports.subscribe = function name(socket, next) {
@@ -106,6 +111,14 @@ exports.subscribe = function name(socket, next) {
     id: authData.id,
     date: curentdate,
   });
-  console.log("tC-877", io.PUBLIC_USER);
+  socket.join(PUBLIC_CHAT);
   socket.emit("Not_In_Chat", true);
+  socket.emit("New_Group_Member", {
+    event: "you joined",
+    name: authData.name,
+  });
+  socket.to(PUBLIC_CHAT).emit("New_Group_Member", {
+    event: `${authData.name} Joined this Chat`,
+    name: authData.name,
+  });
 };

@@ -17,30 +17,32 @@ export default function PublicChat(props) {
     return store.user;
   });
   let [inChat, setInChat] = useState(false);
+  let [socket, setSocket] = useState({});
+  let [joinState, setjoinState] = useState();
   let [hideView, sethideView] = useState(false);
   let history = useHistory();
-  let socket;
 
   useEffect(function () {
     if (user.id == "xxxxxxxxxxxx") {
       return history.push("/");
     }
     //authenticate user
-
-    socket = io("http://localhost:4000/chat", {
-      auth: { name: user.name, id: user.id },
-    });
-    socket.on("connect_error", function (data) {
-      console.log("TC-ERROR 1 !!!!!!!", data);
-    });
-
-    socket.on("Not_In_Chat", function (data) {
-      console.log("TC-8878", data);
-      if (!data) {
-        return setInChat(false);
-      }
-      setInChat(data);
-    });
+    if (!socket.connected) {
+      let conn = io("http://localhost:4000/chat", {
+        auth: { name: user.name, id: user.id },
+      });
+      conn.on("connect_error", function (data) {
+        console.log("TC-ERROR 1 !!!!!!!", data);
+        setSocket({});
+      });
+      conn.on("Not_In_Chat", function (data) {
+        if (!data) {
+          return setInChat(false);
+        }
+        setSocket(conn);
+        setInChat(data);
+      });
+    }
   }, []);
 
   useEffect(
@@ -56,6 +58,10 @@ export default function PublicChat(props) {
     }
   }
 
+  function joinCallback(data) {
+    setjoinState(data);
+    //Object { event: "you joined", name: "@dadsad" }
+  }
   let classses = { marginTop: fullscreen && inChat ? "0px" : "70px" };
 
   return (
@@ -67,8 +73,14 @@ export default function PublicChat(props) {
       <div style={classses} class="content-page">
         <div class="content">
           <div class="container-fluid">
-            {!inChat && <JoinChat setState={setState} />}
-            {inChat && <ChatApp  hideView={!hideView} setState={setState} />}
+            {!inChat && <JoinChat cb={joinCallback} setState={setState} />}
+            {inChat && (
+              <ChatApp
+                joinState={joinState}
+                hideView={!hideView}
+                setState={setState}
+              />
+            )}
           </div>
         </div>
       </div>

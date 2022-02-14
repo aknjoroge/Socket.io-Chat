@@ -21,7 +21,7 @@ let connection = require("./controller/loadAppData");
 //Provide the client a socket ID, acts as our token
 io.of("/provider").on("connection", (socket) => {
   let userName = socket.handshake.auth.userName;
-  console.log("/provider connected ", "name: ", userName);
+
   if (userName) {
     socket.user = {
       userName,
@@ -37,14 +37,16 @@ io.of("/provider").on("connection", (socket) => {
 const appPublicData = io.of("/publicData");
 const publicChat = io.of("/chat");
 const subscribeToChat = io.of("/chat/subscribe");
+const groupChat = io.of("/groups");
 
 //Example of a middleware
 appPublicData.use(authMiddleware.protected);
 
 //Read conencted socket stats
 appPublicData.on("connection", connection.loadApp);
-publicChat.on("connection", authMiddleware.publicProtected);
 subscribeToChat.on("connection", authMiddleware.subscribe);
+publicChat.on("connection", authMiddleware.publicProtected);
+groupChat.on("connection", connection.loadGroups);
 
 //Public response
 function publicResponce(method, res) {
@@ -70,4 +72,5 @@ app.use("*", function (req, res, next) {
 
 exports.appPublicData = appPublicData;
 exports.appio = io;
+
 module.exports = server;

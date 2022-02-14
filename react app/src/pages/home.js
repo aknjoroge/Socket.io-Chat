@@ -1,46 +1,44 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import TopBar from "../components/common/topbar";
 import SideBar from "../components/common/sideBar";
-import { userAction } from "../store/user";
 import Users from "../components/users";
 import { io } from "socket.io-client";
 export default function Home() {
   let dispatch = useDispatch();
+  let [socket, setSocket] = useState({});
   let user = useSelector(function (store) {
     return store.user;
   });
   let history = useHistory();
-  let socket;
+
   const [activeUserrows, setrows] = React.useState([]);
 
   useEffect(
     function () {
       if (user.id == "xxxxxxxxxxxx") {
         return history.push("/");
-        // let localUSer = localStorage.getItem("publicUserID");
-        // if (typeof localUSer == "string") {
-        //   let userObject = JSON.parse(localUSer);
-        //   if (userObject.name != "") {
-        //     dispatch(userAction.loaduser(userObject));
-        //   }
-        // }
-        return;
       }
-      //authenticate user
-      socket = io("http://localhost:4000/publicData", {
-        auth: { name: user.name, id: user.id },
-      });
+      if (!socket.connected) {
+        //authenticate user
+        let conn = io("http://localhost:4000/publicData", {
+          auth: { name: user.name, id: user.id },
+        });
+        conn.on("connect_error", function (data) {
+          console.log("TC-ERROR 2 !!!!!!!", data);
+          setSocket({});
+        });
+        conn.on("connected_success", function (data) {
+          setSocket(conn);
+        });
 
-      socket.on("connect_error", function (data) {
-        console.log("TC-ERROR 2 !!!!!!!", data);
-      });
-      socket.on("active_clients", function (data) {
-        setrows(data);
-      });
+        conn.on("active_clients", function (data) {
+          setrows(data);
+        });
+      }
     },
     [user]
   );

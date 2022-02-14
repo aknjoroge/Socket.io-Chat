@@ -22,8 +22,13 @@ body {
 }
 .app-input {
   height: 50px !important;
+}
 
-  border-color: blue !important;
+.inputValid {
+  border-color: green !important;
+}
+.inputInValid {
+  border-color: red !important;
 }
 .sidebar-main {
   /* height: 100vh !important; */
@@ -35,7 +40,7 @@ body {
   cursor: pointer;
 }
 .slimscroll-chat {
-  max-height: 370px;
-  min-height: 370px;
+  max-height: 330px;
+  min-height: 330px;
   overflow-y: scroll;
 }

@@ -5,6 +5,7 @@ import PublicChat from "./components/publicChat";
 import Online from "./pages/home";
 import Login from "./pages/login";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Groups from "./components/groupApp";
 function App() {
   return (
     <Fragment>
@@ -19,6 +20,9 @@ function App() {
       </Route>
       <Route path={"/public"} exact>
         <PublicChat fullscreen={true} />
+      </Route>
+      <Route path={"/groups"} exact>
+        <Groups fullscreen={true} />
       </Route>
     </Fragment>
   );

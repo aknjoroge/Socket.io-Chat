@@ -52,7 +52,7 @@ function Modal() {
                 , clone it and play with it, add a chat Database is need be.
               </li>
             </ul>
-            <p className="ml-4">
+            <p className="ml-1">
               &copy;{" "}
               <a target="_blank" href="https://alex.techkey.co.ke/">
                 akNjoroge

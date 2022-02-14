@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 let initialState = {
   name: "@",
   id: "xxxxxxxxxxxx",
+  socketID: "",
 };
 let userSlice = createSlice({
   name: "userSlice",
